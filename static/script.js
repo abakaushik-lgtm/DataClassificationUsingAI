@@ -435,10 +435,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // 1. Set Species Title
         const speciesTitle = document.getElementById("predicted-species-title");
-        speciesTitle.textContent = data.species;
+        speciesTitle.textContent = "Iris " + data.species;
         
         // Remove prior colors
         speciesTitle.style.color = `var(--${data.species.toLowerCase()}-color)`;
+
+        // Update confidence label
+        const confidenceTextElement = document.getElementById("predicted-species-confidence");
+        const confidenceVal = (data.confidence * 100).toFixed(1);
+        confidenceTextElement.textContent = `Confidence: ${confidenceVal}%`;
 
         // 2. Set Confidence ring progress
         const confidencePctVal = Math.round(data.confidence * 100);
