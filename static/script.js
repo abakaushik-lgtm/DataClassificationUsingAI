@@ -143,6 +143,8 @@ document.addEventListener("DOMContentLoaded", () => {
         // 1. Set Accuracy badges and fields
         const accPct = (metadata.accuracy * 100).toFixed(1) + "%";
         document.getElementById("model-accuracy-badge").textContent = accPct;
+        document.getElementById("header-accuracy-badge").textContent = `Accuracy: ${accPct}`;
+        document.getElementById("overview-accuracy-value").textContent = accPct;
         document.getElementById("metric-train-acc").textContent = (metadata.train_accuracy * 100).toFixed(1) + "%";
         
         // 2. Set split info and sample size
