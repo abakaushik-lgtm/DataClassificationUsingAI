@@ -242,6 +242,7 @@
                             <div class="tabs-header">
                                 <button class="tab-btn active" data-tab="tab-importance">Feature Importance</button>
                                 <button class="tab-btn" data-tab="tab-matrix">Confusion Matrix</button>
+                                <button class="tab-btn" data-tab="tab-report">Classification Report</button>
                                 <button class="tab-btn" data-tab="tab-stats">Dataset Stats</button>
                             </div>
                             
@@ -261,6 +262,27 @@
                                             <!-- Managed dynamically via JS -->
                                             <div class="matrix-loading">Loading metrics...</div>
                                         </div>
+                                    </div>
+                                </div>
+
+                                <!-- Classification Report Tab -->
+                                <div class="tab-panel" id="tab-report">
+                                    <div class="table-wrapper">
+                                        <table class="stats-table" id="classification-report-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Class Name</th>
+                                                    <th>Precision</th>
+                                                    <th>Recall</th>
+                                                    <th>F1-Score</th>
+                                                    <th>Support</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <!-- Filled dynamically via JS -->
+                                                <tr><td colspan="5" style="text-align: center;">Loading report...</td></tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                                 

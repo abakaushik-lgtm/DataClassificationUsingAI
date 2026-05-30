@@ -155,7 +155,10 @@ document.addEventListener("DOMContentLoaded", () => {
         // 4. Render Heatmapped Confusion Matrix
         renderConfusionMatrix(metadata.confusion_matrix, metadata.target_names);
 
-        // 5. Populate Dataset Statistics Table
+        // 5. Populate Classification Report Table
+        renderClassificationReport(metadata.classification_report);
+
+        // 6. Populate Dataset Statistics Table
         renderDatasetStats(metadata.dataset_stats);
     };
 
@@ -290,6 +293,45 @@ document.addEventListener("DOMContentLoaded", () => {
                 cell.title = `Actual: ${targetNames[rIdx].toUpperCase()}, Predicted: ${targetNames[cIdx].toUpperCase()} (${value} samples)`;
                 container.appendChild(cell);
             });
+        });
+    };
+
+    const renderClassificationReport = (report) => {
+        const tbody = document.querySelector("#classification-report-table tbody");
+        if (!tbody) return;
+
+        tbody.innerHTML = "";
+
+        const classesToDisplay = ["setosa", "versicolor", "virginica", "macro avg", "weighted avg"];
+
+        classesToDisplay.forEach(classKey => {
+            const classMetrics = report[classKey];
+            if (!classMetrics) return;
+
+            const row = document.createElement("tr");
+
+            // Format class labels for readability
+            let displayName = classKey;
+            if (classKey === "setosa" || classKey === "versicolor" || classKey === "virginica") {
+                displayName = classKey.charAt(0).toUpperCase() + classKey.slice(1);
+            } else if (classKey === "macro avg") {
+                displayName = "Macro Average";
+            } else if (classKey === "weighted avg") {
+                displayName = "Weighted Average";
+            }
+
+            // Bold averages for design separation
+            const isAvg = classKey.includes("avg");
+            const boldStyle = isAvg ? ' style="font-weight: 700; background: rgba(255,255,255,0.015);"' : "";
+
+            row.innerHTML = `
+                <td${boldStyle}>${displayName}</td>
+                <td${boldStyle}>${(classMetrics.precision * 100).toFixed(1)}%</td>
+                <td${boldStyle}>${(classMetrics.recall * 100).toFixed(1)}%</td>
+                <td${boldStyle}>${(classMetrics["f1-score"] * 100).toFixed(1)}%</td>
+                <td${boldStyle}>${classMetrics.support}</td>
+            `;
+            tbody.appendChild(row);
         });
     };
 

@@ -6,7 +6,11 @@ An elegant, production-ready machine learning classification web application tha
 - **Petal Length** (cm)
 - **Petal Width** (cm)
 
-The system features a **Decision Tree Classifier** trained using `scikit-learn` on the Iris dataset, wrapped in a **Python Flask** API backend, paired with a gorgeous, high-end **glassmorphic interactive dashboard** UI supporting live sliders, numerical syncing, quick test presets, dark/light theme toggles, and Chart.js animations.
+The system features a **Decision Tree Classifier** trained using `scikit-learn` on the Iris dataset, wrapped in a **Python Flask** backend, paired with a gorgeous, high-end **glassmorphic interactive dashboard** UI supporting live sliders, numerical syncing, quick test presets, dark/light theme toggles, and Chart.js animations.
+
+### 🖥️ Dashboard UI Preview
+
+![Data Classification Using AI - Glassmorphic Dark Mode Dashboard Mockup](static/screenshot.png)
 
 ---
 
