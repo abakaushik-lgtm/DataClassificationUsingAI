@@ -1,0 +1,103 @@
+{
+    "accuracy": 0.9333,
+    "train_accuracy": 0.9917,
+    "split_ratio": "80/20",
+    "sample_sizes": {
+        "total": 150,
+        "train": 120,
+        "test": 30
+    },
+    "target_names": [
+        "setosa",
+        "versicolor",
+        "virginica"
+    ],
+    "feature_names": [
+        "Sepal Length",
+        "Sepal Width",
+        "Petal Length",
+        "Petal Width"
+    ],
+    "feature_importances": {
+        "Sepal Length": 0.0063,
+        "Sepal Width": 0.0169,
+        "Petal Length": 0.5656,
+        "Petal Width": 0.4112
+    },
+    "confusion_matrix": [
+        [
+            10,
+            0,
+            0
+        ],
+        [
+            0,
+            9,
+            1
+        ],
+        [
+            0,
+            1,
+            9
+        ]
+    ],
+    "classification_report": {
+        "setosa": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 10.0
+        },
+        "versicolor": {
+            "precision": 0.9,
+            "recall": 0.9,
+            "f1-score": 0.9,
+            "support": 10.0
+        },
+        "virginica": {
+            "precision": 0.9,
+            "recall": 0.9,
+            "f1-score": 0.9,
+            "support": 10.0
+        },
+        "accuracy": 0.9333333333333333,
+        "macro avg": {
+            "precision": 0.9333333333333332,
+            "recall": 0.9333333333333332,
+            "f1-score": 0.9333333333333332,
+            "support": 30.0
+        },
+        "weighted avg": {
+            "precision": 0.9333333333333333,
+            "recall": 0.9333333333333333,
+            "f1-score": 0.9333333333333333,
+            "support": 30.0
+        }
+    },
+    "dataset_stats": {
+        "Sepal Length": {
+            "mean": 5.84,
+            "min": 4.3,
+            "max": 7.9,
+            "std": 0.83
+        },
+        "Sepal Width": {
+            "mean": 3.06,
+            "min": 2.0,
+            "max": 4.4,
+            "std": 0.44
+        },
+        "Petal Length": {
+            "mean": 3.76,
+            "min": 1.0,
+            "max": 6.9,
+            "std": 1.77
+        },
+        "Petal Width": {
+            "mean": 1.2,
+            "min": 0.1,
+            "max": 2.5,
+            "std": 0.76
+        }
+    }
+}

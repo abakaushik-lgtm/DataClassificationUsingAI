@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Data Classifier - Iris Species Predictor</title>
+    
+    <!-- Google Fonts for Premium Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons via CDN for clean, modern symbols -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Chart.js via CDN for beautiful rendering of feature importances -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Floating Background Glowing Orbs (Premium Tech Theme) -->
+        <div class="glow-orb glow-1"></div>
+        <div class="glow-orb glow-2"></div>
+        
+        <!-- Header Section -->
+        <header class="main-header">
+            <div class="logo-area">
+                <div class="logo-icon-wrapper">
+                    <i data-lucide="cpu" class="logo-icon"></i>
+                </div>
+                <div>
+                    <h1>Iris Classifier <span class="badge">AI Model</span></h1>
+                    <p class="subtitle">Real-time Machine Learning Classification System</p>
+                </div>
+            </div>
+            
+            <button id="theme-toggle" class="theme-btn" aria-label="Toggle Theme">
+                <i data-lucide="moon" class="theme-icon-dark"></i>
+                <i data-lucide="sun" class="theme-icon-light"></i>
+            </button>
+        </header>
+        
+        <!-- Main Layout Grid -->
+        <main class="dashboard-grid">
+            
+            <!-- Left Panel: Inputs & Overview -->
+            <section class="panel-left">
+                <!-- Overview Card -->
+                <div class="dashboard-card info-card">
+                    <div class="card-header">
+                        <i data-lucide="info" class="card-icon blue"></i>
+                        <h2>Project Overview</h2>
+                    </div>
+                    <div class="card-body">
+                        <p>This intelligent system utilizes a supervised <strong>Decision Tree Classifier</strong> trained on the famous <strong>Iris Dataset</strong> to classify Iris flowers into three distinct species based on four biological measurements.</p>
+                        <div class="features-list">
+                            <span class="feat-tag">Setosa</span>
+                            <span class="feat-tag">Versicolor</span>
+                            <span class="feat-tag">Virginica</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Prediction Input Form Card -->
+                <div class="dashboard-card form-card">
+                    <div class="card-header">
+                        <i data-lucide="sliders" class="card-icon purple"></i>
+                        <h2>Flower Measurements (cm)</h2>
+                    </div>
+                    
+                    <div class="card-body">
+                        <div class="presets-section">
+                            <span class="preset-label">Test Samples:</span>
+                            <div class="preset-buttons">
+                                <button type="button" class="preset-btn" data-setosa="5.1,3.5,1.4,0.2">Setosa</button>
+                                <button type="button" class="preset-btn" data-versicolor="6.1,2.8,4.7,1.2">Versicolor</button>
+                                <button type="button" class="preset-btn" data-virginica="6.7,3.0,5.2,2.3">Virginica</button>
+                            </div>
+                        </div>
+                        
+                        <form id="prediction-form" class="prediction-form">
+                            <!-- Sepal Length Input -->
+                            <div class="input-group">
+                                <div class="input-labels">
+                                    <label for="sepal_length">Sepal Length</label>
+                                    <span class="val-badge" id="sepal_length_val">5.1 cm</span>
+                                </div>
+                                <div class="slider-container">
+                                    <input type="range" id="sepal_length_slider" class="range-slider" min="4.0" max="8.0" step="0.1" value="5.1">
+                                    <input type="number" id="sepal_length" name="sepal_length" class="num-input" min="4.0" max="8.0" step="0.1" value="5.1" required>
+                                </div>
+                            </div>
+                            
+                            <!-- Sepal Width Input -->
+                            <div class="input-group">
+                                <div class="input-labels">
+                                    <label for="sepal_width">Sepal Width</label>
+                                    <span class="val-badge" id="sepal_width_val">3.5 cm</span>
+                                </div>
+                                <div class="slider-container">
+                                    <input type="range" id="sepal_width_slider" class="range-slider" min="2.0" max="4.5" step="0.1" value="3.5">
+                                    <input type="number" id="sepal_width" name="sepal_width" class="num-input" min="2.0" max="4.5" step="0.1" value="3.5" required>
+                                </div>
+                            </div>
+                            
+                            <!-- Petal Length Input -->
+                            <div class="input-group">
+                                <div class="input-labels">
+                                    <label for="petal_length">Petal Length</label>
+                                    <span class="val-badge" id="petal_length_val">1.4 cm</span>
+                                </div>
+                                <div class="slider-container">
+                                    <input type="range" id="petal_length_slider" class="range-slider" min="1.0" max="7.0" step="0.1" value="1.4">
+                                    <input type="number" id="petal_length" name="petal_length" class="num-input" min="1.0" max="7.0" step="0.1" value="1.4" required>
+                                </div>
+                            </div>
+                            
+                            <!-- Petal Width Input -->
+                            <div class="input-group">
+                                <div class="input-labels">
+                                    <label for="petal_width">Petal Width</label>
+                                    <span class="val-badge" id="petal_width_val">0.2 cm</span>
+                                </div>
+                                <div class="slider-container">
+                                    <input type="range" id="petal_width_slider" class="range-slider" min="0.1" max="2.5" step="0.1" value="0.2">
+                                    <input type="number" id="petal_width" name="petal_width" class="num-input" min="0.1" max="2.5" step="0.1" value="0.2" required>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" id="predict-btn" class="submit-btn">
+                                <span>Analyze & Predict</span>
+                                <i data-lucide="arrow-right" class="btn-arrow"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Right Panel: Results & Analytics -->
+            <section class="panel-right">
+                <!-- Results Output Card -->
+                <div class="dashboard-card results-card" id="results-container">
+                    <div class="card-header">
+                        <i data-lucide="activity" class="card-icon rose"></i>
+                        <h2>Prediction Analysis</h2>
+                    </div>
+                    <div class="card-body result-placeholder" id="result-placeholder">
+                        <div class="pulse-icon">
+                            <i data-lucide="scan-line"></i>
+                        </div>
+                        <h3>Awaiting Input</h3>
+                        <p>Adjust flower measurements on the left and click "Analyze & Predict" to classify the species using the AI model.</p>
+                    </div>
+                    
+                    <div class="card-body result-display hidden" id="result-display">
+                        <!-- Main prediction highlight -->
+                        <div class="prediction-main">
+                            <div class="species-visual">
+                                <div class="flower-icon-bg">
+                                    <i data-lucide="flower" class="flower-icon"></i>
+                                </div>
+                                <div class="species-title">
+                                    <span class="label">Predicted Species</span>
+                                    <h3 id="predicted-species-title">Versicolor</h3>
+                                </div>
+                            </div>
+                            
+                            <!-- Circular confidence chart -->
+                            <div class="confidence-gauge">
+                                <svg class="progress-ring" width="100" height="100">
+                                    <circle class="progress-ring-circle-bg" stroke="var(--border-color)" stroke-width="8" fill="transparent" r="42" cx="50" cy="50"/>
+                                    <circle id="confidence-ring" class="progress-ring-circle" stroke="var(--accent-primary)" stroke-width="8" fill="transparent" r="42" cx="50" cy="50"/>
+                                </svg>
+                                <div class="confidence-text">
+                                    <span id="confidence-percentage">98%</span>
+                                    <span class="conf-label">Confidence</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Confidence Probabilities Breakdowns -->
+                        <div class="probability-bars">
+                            <h4 class="sub-heading">Probability Distribution</h4>
+                            <div class="prob-row" id="prob-setosa">
+                                <span class="class-label">Setosa</span>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar fill-setosa" style="width: 0%"></div>
+                                </div>
+                                <span class="class-percentage">0%</span>
+                            </div>
+                            <div class="prob-row" id="prob-versicolor">
+                                <span class="class-label">Versicolor</span>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar fill-versicolor" style="width: 0%"></div>
+                                </div>
+                                <span class="class-percentage">0%</span>
+                            </div>
+                            <div class="prob-row" id="prob-virginica">
+                                <span class="class-label">Virginica</span>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar fill-virginica" style="width: 0%"></div>
+                                </div>
+                                <span class="class-percentage">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Model Performance Card -->
+                <div class="dashboard-card metrics-card">
+                    <div class="card-header">
+                        <i data-lucide="gauge" class="card-icon cyan"></i>
+                        <h2>Model Performance & Diagnostics</h2>
+                        <div class="acc-badge-wrapper">
+                            Accuracy <span id="model-accuracy-badge" class="accuracy-badge">--%</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="metrics-grid">
+                            <div class="metric-item">
+                                <span class="metric-label">Algorithm</span>
+                                <span class="metric-value">Decision Tree</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Train/Test Split</span>
+                                <span id="metric-split" class="metric-value">--/--</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Training Accuracy</span>
+                                <span id="metric-train-acc" class="metric-value">--%</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Samples Checked</span>
+                                <span id="metric-total-samples" class="metric-value">--</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Tabs for confusion matrix vs feature importance -->
+                        <div class="tabs-container">
+                            <div class="tabs-header">
+                                <button class="tab-btn active" data-tab="tab-importance">Feature Importance</button>
+                                <button class="tab-btn" data-tab="tab-matrix">Confusion Matrix</button>
+                                <button class="tab-btn" data-tab="tab-stats">Dataset Stats</button>
+                            </div>
+                            
+                            <div class="tabs-content">
+                                <!-- Feature Importance Tab -->
+                                <div class="tab-panel active" id="tab-importance">
+                                    <div class="chart-container">
+                                        <canvas id="importanceChart"></canvas>
+                                    </div>
+                                </div>
+                                
+                                <!-- Confusion Matrix Tab -->
+                                <div class="tab-panel" id="tab-matrix">
+                                    <div class="matrix-viz-container">
+                                        <p class="matrix-caption">Values show count of predictions on validation set (20% split)</p>
+                                        <div class="matrix-grid-wrapper" id="confusion-matrix-grid">
+                                            <!-- Managed dynamically via JS -->
+                                            <div class="matrix-loading">Loading metrics...</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Dataset Stats Tab -->
+                                <div class="tab-panel" id="tab-stats">
+                                    <div class="table-wrapper">
+                                        <table class="stats-table" id="dataset-stats-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Measurement</th>
+                                                    <th>Min</th>
+                                                    <th>Max</th>
+                                                    <th>Mean</th>
+                                                    <th>Std Dev</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <!-- Filled dynamically via JS -->
+                                                <tr><td colspan="5" style="text-align: center;">Loading data...</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer class="app-footer">
+            <p>Designed with absolute precision. Python Flask, scikit-learn, and Modern Vanilla CSS Glassmorphism.</p>
+        </footer>
+    </div>
+    
+    <!-- Link to Javascript Logic -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
