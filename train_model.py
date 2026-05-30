@@ -5,22 +5,22 @@ import pandas as pd
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 
 def train_and_save_model():
     print("Loading Iris dataset...")
-    # Load dataset
     iris = load_iris()
     X = iris.data
     y = iris.target
     feature_names = [name.replace(" (cm)", "").title() for name in iris.feature_names]
     target_names = list(iris.target_names)
     
-    # Create DataFrame for statistics
+    # Calculate Dataset Statistics
     df = pd.DataFrame(X, columns=feature_names)
     df['species'] = [target_names[i] for i in y]
     
-    # 1. Calculate Dataset Statistics
     dataset_stats = {}
     for col in feature_names:
         dataset_stats[col] = {
@@ -30,52 +30,85 @@ def train_and_save_model():
             "std": round(float(df[col].std()), 2)
         }
     
-    # 2. Train-Test Split (80/20 split, stratified to keep balance)
+    # Train-Test Split (80/20 split, stratified to keep balance)
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=42, stratify=y
     )
     
     print(f"Dataset split: {len(X_train)} training samples, {len(X_test)} testing samples.")
     
-    # 3. Train Decision Tree Classifier
-    model = DecisionTreeClassifier(max_depth=4, random_state=42)
-    model.fit(X_train, y_train)
+    # --- 1. Train Decision Tree Classifier ---
+    dt_model = DecisionTreeClassifier(max_depth=4, random_state=42)
+    dt_model.fit(X_train, y_train)
+    dt_y_pred = dt_model.predict(X_test)
+    dt_accuracy = accuracy_score(y_test, dt_y_pred)
     
-    # 4. Model Evaluation
-    y_pred_train = model.predict(X_train)
-    y_pred_test = model.predict(X_test)
+    # --- 2. Train Random Forest Classifier ---
+    rf_model = RandomForestClassifier(n_estimators=100, max_depth=4, random_state=42)
+    rf_model.fit(X_train, y_train)
+    rf_y_pred = rf_model.predict(X_test)
+    rf_accuracy = accuracy_score(y_test, rf_y_pred)
     
-    train_accuracy = accuracy_score(y_train, y_pred_train)
-    test_accuracy = accuracy_score(y_test, y_pred_test)
+    # --- 3. Train Logistic Regression Classifier ---
+    lr_model = LogisticRegression(max_iter=1000, random_state=42)
+    lr_model.fit(X_train, y_train)
+    lr_y_pred = lr_model.predict(X_test)
+    lr_accuracy = accuracy_score(y_test, lr_y_pred)
     
-    print(f"Training Accuracy: {train_accuracy:.4f}")
-    print(f"Testing Accuracy: {test_accuracy:.4f}")
+    print(f"Decision Tree Accuracy: {dt_accuracy:.4f}")
+    print(f"Random Forest Accuracy: {rf_accuracy:.4f}")
+    print(f"Logistic Regression Accuracy: {lr_accuracy:.4f}")
     
-    # Generate classification report
+    # Let's save the highest-performing model for predictions in the app!
+    # Random Forest usually performs best or matches others, let's serialize it as model.pkl
+    best_model = rf_model
+    best_accuracy = rf_accuracy
+    best_model_name = "Random Forest"
+    
+    if dt_accuracy > rf_accuracy and dt_accuracy > lr_accuracy:
+        best_model = dt_model
+        best_accuracy = dt_accuracy
+        best_model_name = "Decision Tree"
+    elif lr_accuracy > rf_accuracy and lr_accuracy > dt_accuracy:
+        best_model = lr_model
+        best_accuracy = lr_accuracy
+        best_model_name = "Logistic Regression"
+        
+    print(f"Saving the best model ({best_model_name}) with accuracy {best_accuracy:.4f} to 'model.pkl'...")
+    
+    # Save the selected best model using pickle
+    model_filename = 'model.pkl'
+    with open(model_filename, 'wb') as f:
+        pickle.dump(best_model, f)
+        
+    # Generate classification report for the best model
+    best_pred_test = best_model.predict(X_test)
+    best_pred_train = best_model.predict(X_train)
     report_dict = classification_report(
-        y_test, y_pred_test, target_names=target_names, output_dict=True
+        y_test, best_pred_test, target_names=target_names, output_dict=True
     )
     
-    # Generate confusion matrix
-    cm = confusion_matrix(y_test, y_pred_test)
-    cm_list = cm.tolist() # Convert to list for JSON serialization
+    # Generate confusion matrix for the best model
+    cm = confusion_matrix(y_test, best_pred_test)
+    cm_list = cm.tolist()
     
-    # Extract Feature Importances
-    importances = model.feature_importances_
+    # Extract Feature Importances (Random Forest and Decision Trees support this natively)
+    # If Logistic Regression is chosen, we fallback to coefficients or Decision Tree importance
+    if hasattr(best_model, 'feature_importances_'):
+        importances = best_model.feature_importances_
+    else:
+        # Fallback to Random Forest importances for nice visualization even if Logistic Regression has best accuracy
+        importances = rf_model.feature_importances_
+        
     feature_importance_dict = {
         name: round(float(imp), 4) for name, imp in zip(feature_names, importances)
     }
     
-    # 5. Save the trained model using pickle
-    model_filename = 'model.pkl'
-    with open(model_filename, 'wb') as f:
-        pickle.dump(model, f)
-    print(f"Trained model successfully saved to '{model_filename}'")
-    
-    # 6. Save model metadata to model_metadata.json
+    # Save comparison data and metadata to model_metadata.json
     metadata = {
-        "accuracy": round(test_accuracy, 4),
-        "train_accuracy": round(train_accuracy, 4),
+        "accuracy": round(best_accuracy, 4),
+        "train_accuracy": round(accuracy_score(y_train, best_pred_train), 4),
+        "algorithm": best_model_name,
         "split_ratio": "80/20",
         "sample_sizes": {
             "total": len(X),
@@ -87,7 +120,12 @@ def train_and_save_model():
         "feature_importances": feature_importance_dict,
         "confusion_matrix": cm_list,
         "classification_report": report_dict,
-        "dataset_stats": dataset_stats
+        "dataset_stats": dataset_stats,
+        "model_comparison": [
+            {"model": "Decision Tree", "accuracy": round(dt_accuracy, 4)},
+            {"model": "Random Forest", "accuracy": round(rf_accuracy, 4)},
+            {"model": "Logistic Regression", "accuracy": round(lr_accuracy, 4)}
+        ]
     }
     
     metadata_filename = 'model_metadata.json'

@@ -147,21 +147,54 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("overview-accuracy-value").textContent = accPct;
         document.getElementById("metric-train-acc").textContent = (metadata.train_accuracy * 100).toFixed(1) + "%";
         
-        // 2. Set split info and sample size
+        // 2. Set algorithm name
+        document.getElementById("metric-algorithm").textContent = metadata.algorithm || "Random Forest";
+        
+        // 3. Set split info and sample size
         document.getElementById("metric-split").textContent = metadata.split_ratio;
         document.getElementById("metric-total-samples").textContent = metadata.sample_sizes.total;
 
-        // 3. Render Chart.js Feature Importances
+        // 4. Render Chart.js Feature Importances
         renderImportanceChart(metadata.feature_importances);
 
-        // 4. Render Heatmapped Confusion Matrix
+        // 5. Render Heatmapped Confusion Matrix
         renderConfusionMatrix(metadata.confusion_matrix, metadata.target_names);
 
-        // 5. Populate Classification Report Table
+        // 6. Populate Model Comparison Table
+        if (metadata.model_comparison) {
+            renderModelComparison(metadata.model_comparison, metadata.algorithm);
+        }
+
+        // 7. Populate Classification Report Table
         renderClassificationReport(metadata.classification_report);
 
-        // 6. Populate Dataset Statistics Table
+        // 8. Populate Dataset Statistics Table
         renderDatasetStats(metadata.dataset_stats);
+    };
+
+    const renderModelComparison = (comparisonList, bestModelName) => {
+        const tbody = document.querySelector("#model-comparison-table tbody");
+        if (!tbody) return;
+
+        tbody.innerHTML = "";
+
+        comparisonList.forEach(item => {
+            const row = document.createElement("tr");
+            const isBest = item.model === bestModelName;
+            
+            const rowStyle = isBest ? ' style="font-weight: 700; background: rgba(16, 185, 129, 0.05);"' : "";
+            
+            const statusTag = isBest 
+                ? `<span class="badge" style="background: linear-gradient(135deg, var(--accent-green) 0%, #059669 100%); font-size: 0.65rem; padding: 0.15rem 0.5rem; text-transform: uppercase;">Active (Best)</span>`
+                : `<span style="font-size: 0.75rem; color: var(--text-muted);">Standard</span>`;
+
+            row.innerHTML = `
+                <td${rowStyle}>${item.model}</td>
+                <td${rowStyle}>${(item.accuracy * 100).toFixed(1)}%</td>
+                <td${rowStyle}>${statusTag}</td>
+            `;
+            tbody.appendChild(row);
+        });
     };
 
     const renderImportanceChart = (importances) => {

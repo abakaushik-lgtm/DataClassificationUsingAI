@@ -265,10 +265,10 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="metrics-grid">
+                         <div class="metrics-grid">
                             <div class="metric-item">
                                 <span class="metric-label">Algorithm</span>
-                                <span class="metric-value">Decision Tree</span>
+                                <span id="metric-algorithm" class="metric-value">--</span>
                             </div>
                             <div class="metric-item">
                                 <span class="metric-label">Train/Test Split</span>
@@ -289,6 +289,7 @@
                             <div class="tabs-header">
                                 <button class="tab-btn active" data-tab="tab-importance">Feature Importance</button>
                                 <button class="tab-btn" data-tab="tab-matrix">Confusion Matrix</button>
+                                <button class="tab-btn" data-tab="tab-comparison">Model Comparison</button>
                                 <button class="tab-btn" data-tab="tab-report">Classification Report</button>
                                 <button class="tab-btn" data-tab="tab-stats">Dataset Stats</button>
                             </div>
@@ -309,6 +310,25 @@
                                             <!-- Managed dynamically via JS -->
                                             <div class="matrix-loading">Loading metrics...</div>
                                         </div>
+                                    </div>
+                                </div>
+
+                                <!-- Model Comparison Tab -->
+                                <div class="tab-panel" id="tab-comparison">
+                                    <div class="table-wrapper">
+                                        <table class="stats-table" id="model-comparison-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Algorithm</th>
+                                                    <th>Validation Accuracy</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <!-- Filled dynamically via JS -->
+                                                <tr><td colspan="3" style="text-align: center;">Loading comparison...</td></tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
 

@@ -1,6 +1,7 @@
 {
-    "accuracy": 0.9333,
-    "train_accuracy": 0.9917,
+    "accuracy": 0.9667,
+    "train_accuracy": 1.0,
+    "algorithm": "Random Forest",
     "split_ratio": "80/20",
     "sample_sizes": {
         "total": 150,
@@ -19,10 +20,10 @@
         "Petal Width"
     ],
     "feature_importances": {
-        "Sepal Length": 0.0063,
-        "Sepal Width": 0.0169,
-        "Petal Length": 0.5656,
-        "Petal Width": 0.4112
+        "Sepal Length": 0.1156,
+        "Sepal Width": 0.0108,
+        "Petal Length": 0.4377,
+        "Petal Width": 0.4359
     },
     "confusion_matrix": [
         [
@@ -37,8 +38,8 @@
         ],
         [
             0,
-            1,
-            9
+            0,
+            10
         ]
     ],
     "classification_report": {
@@ -49,28 +50,28 @@
             "support": 10.0
         },
         "versicolor": {
-            "precision": 0.9,
+            "precision": 1.0,
             "recall": 0.9,
-            "f1-score": 0.9,
+            "f1-score": 0.9473684210526315,
             "support": 10.0
         },
         "virginica": {
-            "precision": 0.9,
-            "recall": 0.9,
-            "f1-score": 0.9,
+            "precision": 0.9090909090909091,
+            "recall": 1.0,
+            "f1-score": 0.9523809523809523,
             "support": 10.0
         },
-        "accuracy": 0.9333333333333333,
+        "accuracy": 0.9666666666666667,
         "macro avg": {
-            "precision": 0.9333333333333332,
-            "recall": 0.9333333333333332,
-            "f1-score": 0.9333333333333332,
+            "precision": 0.9696969696969697,
+            "recall": 0.9666666666666667,
+            "f1-score": 0.9665831244778612,
             "support": 30.0
         },
         "weighted avg": {
-            "precision": 0.9333333333333333,
-            "recall": 0.9333333333333333,
-            "f1-score": 0.9333333333333333,
+            "precision": 0.9696969696969696,
+            "recall": 0.9666666666666667,
+            "f1-score": 0.9665831244778613,
             "support": 30.0
         }
     },
@@ -99,5 +100,19 @@
             "max": 2.5,
             "std": 0.76
         }
-    }
+    },
+    "model_comparison": [
+        {
+            "model": "Decision Tree",
+            "accuracy": 0.9333
+        },
+        {
+            "model": "Random Forest",
+            "accuracy": 0.9667
+        },
+        {
+            "model": "Logistic Regression",
+            "accuracy": 0.9667
+        }
+    ]
 }
