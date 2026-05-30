@@ -180,3 +180,15 @@ The server exposes the following RESTful API endpoints:
 - **Stratified Split**: Keeps the exact same percentage of each species in the training set (80%) and validation set (20%) to prevent bias.
 - **Preventing Overfitting**: By setting a maximum depth constraint of 4, the model learns generalized shapes instead of memorizing training instances.
 - **Inference Probabilities**: Determined by calculating the percentage of training samples from each target species that landed in the terminal leaf node of the decision tree corresponding to the inputs.
+
+---
+
+## 🔮 Future Improvements
+
+To further enhance the accuracy, scalability, and architecture of this classification system, the following updates are planned:
+
+- **Ensemble Learning**: Transition from a single Decision Tree to a **Random Forest Classifier** or **Gradient Boosting** models to reduce variance and achieve greater classification robustness.
+- **Hyperparameter Tuning**: Implement automated optimization pipelines using `GridSearchCV` or `RandomizedSearchCV` to find the absolute best limits for depth, splitting nodes, and leaf size.
+- **Production-Ready Deployment**: Package the Flask application using **Docker** containers and serve it through a production-grade WSGI gateway like **Gunicorn** or **uWSGI** on cloud services (AWS, Render, or Heroku).
+- **Client-Side/Real-Time Predictors**: Compile the scikit-learn models to **ONNX** or convert them to run client-side using WebAssembly/TensorFlow.js to achieve zero-latency local prediction directly within the browser.
+
