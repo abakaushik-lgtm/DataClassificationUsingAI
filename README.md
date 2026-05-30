@@ -1,14 +1,18 @@
 # Data Classification Using AI - Iris Species Predictor
 
+![Python](https://img.shields.io/badge/Python-3.10-blue)
+![Flask](https://img.shields.io/badge/Flask-WebApp-green)
+![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-ML-orange)
+
 An elegant, production-ready machine learning classification web application that predicts the species of an Iris flower based on physical measurements:
 - **Sepal Length** (cm)
 - **Sepal Width** (cm)
 - **Petal Length** (cm)
 - **Petal Width** (cm)
 
-The system features a **Decision Tree Classifier** trained using `scikit-learn` on the Iris dataset, wrapped in a **Python Flask** backend, paired with a gorgeous, high-end **glassmorphic interactive dashboard** UI supporting live sliders, numerical syncing, quick test presets, dark/light theme toggles, and Chart.js animations.
+The system features an ensemble **Random Forest Classifier** trained using `scikit-learn` on the Iris dataset, wrapped in a **Python Flask** backend, paired with a gorgeous, high-end **glassmorphic interactive dashboard** UI supporting live sliders, numerical syncing, quick test presets, dark/light theme toggles, and Chart.js animations.
 
-### 🖥️ Dashboard UI Preview
+## 🖥️ Application Screenshot
 
 ![Data Classification Using AI - Glassmorphic Dark Mode Dashboard Mockup](static/screenshot.png)
 
@@ -180,6 +184,25 @@ The server exposes the following RESTful API endpoints:
 - **Stratified Split**: Keeps the exact same percentage of each species in the training set (80%) and validation set (20%) to prevent bias.
 - **Preventing Overfitting**: By setting a maximum depth constraint of 4, the model learns generalized shapes instead of memorizing training instances.
 - **Inference Probabilities**: Determined by calculating the percentage of training samples from each target species that landed in the terminal leaf node of the decision tree corresponding to the inputs.
+
+---
+
+## 🚀 1-Click Cloud Deployment Guide
+
+This project is fully optimized for direct online deployment on cloud container providers like **Render** or **Railway**. A pre-configured **Render Blueprint Specification** (`render.yaml`) is included in the repository root to configure gunicorn in a zero-configuration environment.
+
+### Deploying to Render (Zero Configuration)
+
+1. **Fork or Push** this code to your own GitHub repository.
+2. Sign in to your **[Render Dashboard](https://dashboard.render.com)**.
+3. Click **New +** at the top right and select **Blueprint**.
+4. Connect your GitHub account and select your **`DataClassificationUsingAI`** repository.
+5. Render will automatically parse the `render.yaml` file to initialize dependencies, run the model training script `train_model.py` to fit the weights, and launch a production **Gunicorn WSGI web server** on Python 3.10.
+6. Once the build pipeline completes, click your generated live URL to access the live dashboard!
+
+### Deployed Live Demo Link
+Once your deployment finishes, update the link below to represent your live app:
+👉 **[Live Demo Link](https://data-classification-ai.onrender.com)** *(A live deployed machine learning app immediately stands out to technical recruiters!)*
 
 ---
 
