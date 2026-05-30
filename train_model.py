@@ -1,13 +1,20 @@
 import pickle
 import json
+import os
 import numpy as np
 import pandas as pd
+
+# Set matplotlib backend to Agg to run in headless mode without GUI window
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, ConfusionMatrixDisplay
 
 def train_and_save_model():
     print("Loading Iris dataset...")
@@ -60,7 +67,6 @@ def train_and_save_model():
     print(f"Logistic Regression Accuracy: {lr_accuracy:.4f}")
     
     # Let's save the highest-performing model for predictions in the app!
-    # Random Forest usually performs best or matches others, let's serialize it as model.pkl
     best_model = rf_model
     best_accuracy = rf_accuracy
     best_model_name = "Random Forest"
@@ -92,12 +98,34 @@ def train_and_save_model():
     cm = confusion_matrix(y_test, best_pred_test)
     cm_list = cm.tolist()
     
-    # Extract Feature Importances (Random Forest and Decision Trees support this natively)
-    # If Logistic Regression is chosen, we fallback to coefficients or Decision Tree importance
+    # --- Plot & Save Confusion Matrix Image using scikit-learn & matplotlib ---
+    print("Generating Confusion Matrix plot image...")
+    # Capitalize target names for nice display labels
+    capitalized_targets = [name.capitalize() for name in target_names]
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=capitalized_targets)
+    
+    # Render with nice styled dimensions and custom color palette
+    fig, ax = plt.subplots(figsize=(6.5, 6))
+    disp.plot(cmap=plt.cm.Purples, ax=ax, colorbar=False)
+    
+    plt.title(f"Confusion Matrix ({best_model_name})", fontsize=14, fontweight='bold', pad=15)
+    plt.xlabel("Predicted Species", fontsize=11, labelpad=10)
+    plt.ylabel("Actual Species", fontsize=11, labelpad=10)
+    plt.tight_layout()
+    
+    # Ensure static directory exists
+    os.makedirs('static', exist_ok=True)
+    
+    # Save image
+    confusion_matrix_img_path = 'static/confusion_matrix.png'
+    plt.savefig(confusion_matrix_img_path, dpi=300, bbox_inches='tight')
+    plt.close()
+    print(f"Successfully generated and saved '{confusion_matrix_img_path}'")
+    
+    # Extract Feature Importances
     if hasattr(best_model, 'feature_importances_'):
         importances = best_model.feature_importances_
     else:
-        # Fallback to Random Forest importances for nice visualization even if Logistic Regression has best accuracy
         importances = rf_model.feature_importances_
         
     feature_importance_dict = {

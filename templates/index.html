@@ -304,11 +304,18 @@
                                 
                                 <!-- Confusion Matrix Tab -->
                                 <div class="tab-panel" id="tab-matrix">
-                                    <div class="matrix-viz-container">
-                                        <p class="matrix-caption">Values show count of predictions on validation set (20% split)</p>
-                                        <div class="matrix-grid-wrapper" id="confusion-matrix-grid">
-                                            <!-- Managed dynamically via JS -->
-                                            <div class="matrix-loading">Loading metrics...</div>
+                                    <div class="matrix-dual-container">
+                                        <div style="display: flex; flex-direction: column; align-items: center;">
+                                            <h4 class="sub-heading" style="margin-bottom: 0.5rem;">Interactive Heatmap Matrix</h4>
+                                            <p class="matrix-caption">Values show count of predictions on validation set (20% split)</p>
+                                            <div class="matrix-grid-wrapper" id="confusion-matrix-grid" style="margin-top: 0.5rem;">
+                                                <!-- Managed dynamically via JS -->
+                                                <div class="matrix-loading">Loading metrics...</div>
+                                            </div>
+                                        </div>
+                                        <div class="matrix-plot-wrapper">
+                                            <h4 class="sub-heading" style="margin-bottom: 0.5rem;">Scikit-Learn Plot (Matplotlib)</h4>
+                                            <img src="{{ url_for('static', filename='confusion_matrix.png') }}" alt="Scikit-Learn Confusion Matrix Display" class="matrix-plot-img">
                                         </div>
                                     </div>
                                 </div>
